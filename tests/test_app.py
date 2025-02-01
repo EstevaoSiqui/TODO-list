@@ -40,7 +40,7 @@ def update_user_return_200(client):
     user_data = {
         'password': 'sdfgsdfgwer',
         'username': 'johndoe',
-        'email': 'test@test.com',
+        'email': 'teste@gmail.com',
         'id': 1,
     }
 
@@ -49,5 +49,31 @@ def update_user_return_200(client):
     assert response.json() == {
         'id': 1,
         'username': 'johndoe',
-        'email': 'test@test.com',
+        'email': 'teste@gmail.com',
     }
+
+
+def teste_delete_user(client):
+    response = client.delete('/users/1')
+    assert response.json() == {
+        'id': 1,
+        'username': 'johndoe',
+        'email': 'teste@gmail.com',
+    }
+
+
+def test_update_notFound_user(client):
+    response = client.put(
+        '/users/0',
+        json={
+            'username': 'johndoe',
+            'email': 'teste@gmail.com',
+            'password': 'abcd',
+        },
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+def test_delete_notFound_user(client):
+    response = client.delete('/users/0')
+    assert response.status_code == HTTPStatus.NOT_FOUND
